@@ -1,0 +1,63 @@
+.banner {
+    margin-top: -10vh; /* Note: Negative margin might cause overlap issues */
+    height: 80vh;
+    margin-bottom: -80px; /* Note: Negative margin might cause overlap issues */
+    color: white; /* Assumed #fff based on other styles */
+    object-fit: contain; /* Usually applied to <img> or <video>, effect on div depends on content */
+}
+
+.banner__contents {
+    margin-left: 30px;
+    padding-top: 300px; /* Increased padding from typical values */
+    /* height: 190px; */ /* Height is commented out */
+}
+
+.banner__title {
+    font-size: 3rem;
+    font-weight: 800;
+    padding-bottom: 0.3rem;
+}
+
+.banner__description {
+    width: 45rem;
+    line-height: 1; /* Tight line height */
+    padding: 1rem 0;
+    font-size: 1rem; /* Increased font size from typical values */
+    max-width: 360px; /* Max width might conflict with width: 45rem */
+    height: 80px; /* Fixed height, might cut off text */
+}
+
+.banner__button {
+    cursor: pointer;
+    color: #fff; /* White text */
+    outline: none;
+    border: none;
+    font-size: 1.2rem; /* Increased font size */
+    font-weight: 700;
+    border-radius: 0.2vw;
+    padding: 1rem 3rem; /* Increased padding */
+    margin-right: 2rem; /* Increased margin */
+    background-color: rgba(51, 51, 51, 0.5); /* Semi-transparent dark grey */
+}
+
+/* Specific style for the play button */
+.banner__button.play { /* Assuming .play is a class added to the banner button */
+    color: #000; /* Black text */
+    background-color: #fff; /* White background */
+}
+
+.banner__button:hover {
+    color: #000; /* Black text on hover */
+    background-color: #c6c6c6; /* Light grey background on hover */
+    transition: all 0.2s; /* Smooth transition for hover effects */
+}
+
+.banner__fadeBottom {
+    height: 40vh; /* Significantly increased height */
+    background-image: linear-gradient(
+        180deg,
+        transparent,
+        rgba(37, 37, 37, 0.91), /* Dark semi-transparent */
+        #111 /* Solid dark grey/black */
+    );
+}
