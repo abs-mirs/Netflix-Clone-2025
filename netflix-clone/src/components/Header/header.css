@@ -1,46 +1,46 @@
 .header_outer_container {
-    position: sticky;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: rgb(148, 132, 132); */ /* Commented out */
-    background-color: rgb(20, 20, 20);
-    /* background-color: transparent;  /* This would override the above if uncommented */
-    height: 10vh; /* Consider using a fixed pixel height for more predictability, e.g., 60px or 70px */
-    color: white;
-    transition: all 0.5s;
-    transition-timing-function: ease-in;
-    z-index: 1;
-    /* background-color: red; */ /* Commented out */
-  }
-  
-  .nav_black {
-    background-color: rgb(20, 20, 20);
-  }
-  
-  .header_container {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(20, 20, 20);
+  height: 10vh;
+  color: #fff;
+  transition: all 0.5s;
+  transition-timing-function: ease-in;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.header_container {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+}
+.header_left ul {
+  width: 140%;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
 
-  .header_left ul {
-    width: 140%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-    cursor: pointer;
-    /* background-color: lightblue; */
-  }
-  
-  .header_right ul {
-    width: 150%;
-    display: flex;
-    justify-content: space-around; /* Note: This is space-around, not space-between like above */
-    list-style: none;
-    cursor: pointer;
-    /* background-color: lightgreen; */
-  }
+/* display: flex;
+  justify-content: space-between;
+} */
+*/ .header_left ul li,
+.header_right ul li {
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+.header_left img {
+  height: 20px;
+  margin-right: 20px;
+}
+.header_right ul {
+  /* width:100%; */
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  gap: 20px;
+}

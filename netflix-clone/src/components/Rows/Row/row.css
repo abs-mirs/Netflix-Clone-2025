@@ -1,0 +1,67 @@
+/* src/components/Row/Row.css */
+.row {
+    color: #fff;
+    margin-left:  20px;
+    font-family: "Roboto", sans-serif;
+    /* font-optical-sizing: auto;
+    font-weight: 30px;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100; */
+  }
+  
+  .row__posters {
+    display: flex;
+    /* overflow-x: scroll; */
+    overflow-y: scroll;
+    padding: 20px;
+    /* scrollbar-width: none;  */
+  }
+  
+  .row__posters::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  
+  .row__poster {
+    max-height: 120px;
+    object-fit: contain;
+    margin-right: 10px;
+    transition: transform 450ms;
+    border-radius: 4px;
+  }
+  
+  .row__poster:hover {
+    transform: scale(1.08);
+  }
+  .row__posterLarge {
+    max-height: 250px;
+    /* margin-top: 20%; */
+  }
+  /* .title{
+    margin: 20px 0 0 0;
+  } */
+  
+  /* only row  */
+  .arrow {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    position: absolute;
+    font-size: 5rem;
+    transform: translateY(5%);
+    z-index: 1;
+    cursor: pointer;
+    padding: 10px 0;
+    opacity: 0.7;
+  }
+  .arrow:hover {
+    opacity: 1;
+  }
+  
+  .arrow.left {
+    left: 10px;
+  }
+  
+  .arrow.right {
+    right: 10px;
+  }

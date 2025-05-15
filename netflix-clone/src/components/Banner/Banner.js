@@ -3,62 +3,116 @@ import axios from "../../utils/axios"; // Note: Adjusted path based on typical c
 import requests from "../../utils/requests"; // Note: Adjusted path based on typical convention, original was ../../utils/requests
 import "./Banner.css";
 
-const Banner = () => {
-  const [movie, setMovie] = useState({}); // Initialize with empty object
-
+function Banner() {
+  const [banner, setBanner] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      // Define async function inside useEffect
+    async function BannerData() {
       try {
-        const request = await axios.get(requests.fetchNetflixOriginals);
-        console.log(request); // Log the full response
-        setMovie(
-          request.data.results[
-            Math.floor(Math.random() * request.data.results.length)
+        const response = await axios.get(requests.fetchNetflixOriginals);
+        console.log(response);
+        setBanner(
+          response.data.results[
+            Math.floor(Math.random() * response.data.results.length)
           ]
         );
-      } catch (error) {
-        console.log("error", error);
+      } catch (err) {
+        console.log(err);
       }
     }
-    fetchData(); // Call the async function
-  }, []); // Empty dependency array ensures this runs only once on mount
-
-  // Function to truncate strings (likely needed for commented out code)
-  // function truncate(str, n) {
-  //     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-  // }
-
+    BannerData();
+  }, []);
+  console.log(banner);
   function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+    return str?.length > n ? str.slice(0, n - 1) + "...." : str;
   }
-
   return (
-    <div
-      className="banner"
-      style={{
-        backgroundSize: "cover",
-        backgroundImage: `url("https://image.tmdb.org/t/p/original${movie?.backdrop_path}")`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div className="banner__contents">
-        <h1 className="banner__title">
-          {movie?.title || movie?.name || movie?.original_name}
-        </h1>
-        <div className="banner__buttons">
-          <button className="banner__button play">Play</button>
-          <button className="banner__button">My List</button>
+    <div className="banner_container">
+      <div
+        className="banner_img"
+        style={{
+          backgroundSize: "cover",
+          backgroundImage: `url("https://image.tmdb.org/t/p/original/${
+            banner?.backdrop_path || banner?.poster_path
+          }")`,
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="banner_contents">
+          <h1>{banner?.title || banner?.name || banner?.original_name}</h1>
+          <div className="banner_buttons">
+            <button className="banner_button">Play</button>
+            <button className="banner_button">My List</button>
+          </div>
+
+          <p className="banner_description">
+            {truncate(banner?.overview, 150)}
+          </p>
         </div>
-        <h1 className="banner__description">{truncate(movie?.overview, 150)}</h1>
+        <div className="banner_fadebotom"></div>
       </div>
-      <div className="banner__fadeBottom" />
     </div>
   );
-};
+}
 
 export default Banner;
+
+// const Banner = () => {
+//   const [movie, setMovie] = useState({}); // Initialize with empty object
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       // Define async function inside useEffect
+//       try {
+//         const request = await axios.get(requests.fetchNetflixOriginals);
+//         console.log(request); // Log the full response
+//         setMovie(
+//           request.data.results[
+//             Math.floor(Math.random() * request.data.results.length)
+//           ]
+//         );
+//       } catch (error) {
+//         console.log("error", error);
+//       }
+//     }
+//     fetchData(); // Call the async function
+//   }, []); // Empty dependency array ensures this runs only once on mount
+
+//   // Function to truncate strings (likely needed for commented out code)
+//   // function truncate(str, n) {
+//   //     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+//   // }
+
+//   function truncate(str, n) {
+//     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+//   }
+
+//   return (
+//     <div
+//       className="banner"
+//       style={{
+//         backgroundSize: "cover",
+//         backgroundImage: `url("https://image.tmdb.org/t/p/original${movie?.backdrop_path}")`,
+//         backgroundPosition: "center",
+//         backgroundRepeat: "no-repeat",
+//       }}
+//     >
+//       <div className="banner__contents">
+//         <h1 className="banner__title">
+//           {movie?.title || movie?.name || movie?.original_name}
+//         </h1>
+//         <div className="banner__buttons">
+//           <button className="banner__button play">Play</button>
+//           <button className="banner__button">My List</button>
+//         </div>
+//         <h1 className="banner__description">{truncate(movie?.overview, 150)}</h1>
+//       </div>
+//       <div className="banner__fadeBottom" />
+//     </div>
+//   );
+// };
+
+// export default Banner;
 
 // Key points captured:
 // Imports: React, hooks, axios, requests.
