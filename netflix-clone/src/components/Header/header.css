@@ -26,13 +26,16 @@
 
 /* display: flex;
   justify-content: space-between;
-} */
-*/ .header_left ul li,
+*/
+
+/* List item styles */
+.header_left ul li,
 .header_right ul li {
   cursor: pointer;
   font-size: 14px;
   transition: color 0.3s;
 }
+
 .header_left img {
   height: 20px;
   margin-right: 20px;
