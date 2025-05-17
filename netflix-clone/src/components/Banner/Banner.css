@@ -1,57 +1,58 @@
 .banner_container {
-    height: 80vh;
-    /* margin-bottom: 10px; */
-  }
-  .banner_img {
-    color: white;
-    object-fit: contain;
-    /* height: 100vh; */
-    /* padding: 60px 30px; */
-  }
-  .banner_contents {
-    padding: 10% 0% 10% 5%;
-    /* color: black; */
-  }
-  .banner_description {
-    width: 45rem;
-    line-height: 1.3;
-    padding-top: 1rem;
-    font-size: 0.9rem;
-    max-width: 360px;
-    /* height: 80vh; */
-  }
-  .banner_buttons {
-    margin-top: 20px;
-  }
-  
-  .banner_button {
-    cursor: pointer;
-    color: #fff;
-    outline: none;
-    border: none;
-    font-weight: 700;
-    border-radius: 0.2vw;
-    padding: 0.5em 2em;
-    margin-right: 1em;
-    background-color: rgba(51, 51, 51, 0.5);
-    transition: all 0.3s;
-  }
-  
-  .banner_button:hover {
-    background-color: #e6e6e6;
-    color: #000;
-  }
-  /* banner fade for botom side */
-  .banner_fadebotom {
-    height: 22vh;
-    background-image: linear-gradient(
-      180deg,
-      transparent,
-      rgba(37, 37, 37, 0.61),
-      #111
-    );
-    /* position: absolute;
+  height: 80vh;
+  /* margin-bottom: 10px; */
+}
+.banner_img {
+  color: white;
+  object-fit: contain;
+  /* height: 100vh; */
+  /* padding: 60px 30px; */
+}
+.banner_contents {
+  padding: 10% 0% 10% 5%;
+  /* color: black; */
+}
+
+.banner_description {
+  width: 45rem;
+  line-height: 1.3;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  max-width: 360px;
+  /* height: 80vh; */
+}
+.banner_buttons {
+  margin-top: 20px;
+}
+
+.banner_button {
+  cursor: pointer;
+  color: #fff;
+  outline: none;
+  border: none;
+  font-weight: 700;
+  border-radius: 0.2vw;
+  padding: 0.5em 2em;
+  margin-right: 1em;
+  background-color: rgba(51, 51, 51, 0.5);
+  transition: all 0.3s;
+}
+
+.banner_button:hover {
+  background-color: #e6e6e6;
+  color: #000;
+}
+/* banner fade for botom side */
+.banner_fadebotom {
+  height: 22vh;
+  background-image: linear-gradient(
+    180deg,
+    transparent,
+    rgba(37, 37, 37, 0.61),
+    #111
+  );
+  /* position: absolute;
     bottom: 0;
     width: auto;
   } */
-  }
+}

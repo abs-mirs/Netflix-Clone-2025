@@ -1,67 +1,66 @@
-/* src/components/Row/Row.css */
+/* In your row.css file */
+
 .row {
-    color: #fff;
-    margin-left:  20px;
-    font-family: "Roboto", sans-serif;
-    /* font-optical-sizing: auto;
-    font-weight: 30px;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100; */
+    margin-left: 20px; /* Or your preferred outer margin */
+    color: white;      /* Or your preferred text color */
+    margin-bottom: 25px; /* Spacing between rows */
+  }
+  
+  .title {
+    font-size: 1.5rem; /* Slightly larger for better visibility */
+    font-weight: 600; /* Bolder */
+    padding-bottom: 0.5rem;
+    line-height: 1.3;
   }
   
   .row__posters {
-    display: flex;
-    /* overflow-x: scroll; */
-    overflow-y: scroll;
-    padding: 20px;
-    /* scrollbar-width: none;  */
+    display: flex;         /* Aligns children (posters) in a row */
+    overflow-y: hidden;    /* Prevents vertical scrollbar on this container */
+    overflow-x: scroll;    /* Enables horizontal scrolling and shows a scrollbar */
+    padding: 15px 0 15px 0; /* Top/Bottom padding. Left padding removed to let posters start at edge. */
+                           /* If your .row has margin-left, posters will align with that edge */
+  
+    /* Optional: To hide the scrollbar but keep scroll functionality */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
   }
   
+  /* Optional: Hides scrollbar for WebKit browsers (Chrome, Safari, newer Edge) */
   .row__posters::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+    display: none;
   }
   
   .row__poster {
-    max-height: 120px;
-    object-fit: contain;
-    margin-right: 10px;
-    transition: transform 450ms;
-    border-radius: 4px;
+    object-fit: contain; /* Scales image while maintaining aspect ratio within its bounds */
+    /* --- CRITICAL CHANGE: Set height, not width: 100% --- */
+    height: 100px;       /* Define a fixed height for standard posters */
+    /* width will be determined by the image's aspect ratio and this height */
+    margin-right: 10px;  /* Spacing between posters */
+    transition: transform 450ms ease-out; /* Smoother transition */
+    cursor: pointer;
+    border-radius: 4px;  /* Optional: slightly rounded corners */
+    flex-shrink: 0;      /* IMPORTANT: Prevents posters from shrinking to fit. */
+                         /* This ensures they maintain their width and cause overflow. */
   }
   
   .row__poster:hover {
     transform: scale(1.08);
+    opacity: 1; /* Ensure full opacity on hover if there are other opacity rules */
   }
+  
   .row__posterLarge {
-    max-height: 250px;
-    /* margin-top: 20%; */
-  }
-  /* .title{
-    margin: 20px 0 0 0;
-  } */
-  
-  /* only row  */
-  .arrow {
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
-    position: absolute;
-    font-size: 5rem;
-    transform: translateY(5%);
-    z-index: 1;
-    cursor: pointer;
-    padding: 10px 0;
-    opacity: 0.7;
-  }
-  .arrow:hover {
-    opacity: 1;
+    height: 250px;       /* Define a fixed height for large posters */
   }
   
-  .arrow.left {
-    left: 10px;
+  .row__posterLarge:hover {
+    transform: scale(1.09); /* Slightly larger scale for larger posters */
   }
   
-  .arrow.right {
-    right: 10px;
+  /* If you have a YouTube player, you might want to style its container */
+  /* Example:
+  .youtube-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
   }
+  */
