@@ -1,160 +1,139 @@
-import React, { useEffect, useState } from "react";
+// --- Imports: Bringing in necessary tools ---
+import React, { useEffect, useState } from "react"; // Core React library and specific functions (Hooks)
 import "./row.css";
 import axios from "../../../utils/axios";
-import movieTrailer from "movie-trailer";
-import YouTube from "react-youtube";
+import movieTrailer from "movie-trailer"; // Library to find movie trailer URLs
+import YouTube from "react-youtube"; // Component to embed YouTube videos
 
-function Row({ title, fetchUrl, isLargeRow }) {
-  const [movies, setMovies] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState("");
+// --- Component Definition: Creating the 'Row' ---
+// This is a function that defines what a "Row" of movies looks like and how it behaves.
+// It accepts 'props' (properties) like title, fetchUrl, and isLargeRow from its parent.
+const Row = ({ title, fetchUrl, isLargeRow }) => {
+  // --- State Variables: Managing data that can change ---
+  // 'useState' is a React Hook to add state to function components.
+  const [movies, setMovie] = useState([]); // 'movies': an array to store the list of movies. Starts empty.
+  // 'setMovie': a function to update the 'movies' list.
+  const [trailerUrl, setTrailerUrl] = useState(""); // 'trailerUrl': a string for the YouTube video ID. Starts empty (no trailer).
+  // 'setTrailerUrl': a function to update the 'trailerUrl'.
 
-  const base_url = "https://image.tmdb.org/t/p/original";
+  // --- Constants: Values that don't change ---
+  const base_url = "https://image.tmdb.org/t/p/original"; // Base part of the URL for movie poster images.
 
+  // --- useEffect Hook: Handling side effects (like fetching data) ---
+  // This code runs after the component is first rendered and whenever 'fetchUrl' changes.
   useEffect(() => {
-    const fetchData = async () => {
+    // Defines an 'async' function (can use 'await') to fetch data.
+    (async () => {
       try {
-        const response = await axios.get(fetchUrl);
-        console.log(response);
-        setMovies(response.data.results);
+        // Tries to run this code
+        // 'await' pauses execution until 'axios.get(fetchUrl)' completes (gets data from the API).
+        const request = await axios.get(fetchUrl);
+        // Updates the 'movies' state with the 'results' array from the API response.
+        setMovie(request.data.results);
       } catch (error) {
-        console.error("Row.js - Error fetching movies:", error);
+        // If an error happens in the 'try' block
+        console.log("error", error); // Logs the error to the console.
       }
-    };
-    fetchData();
-  }, [fetchUrl]);
+    })(); // Immediately calls the async function defined above.
+  }, [fetchUrl]); // The '[fetchUrl]' tells React to re-run this effect only if 'fetchUrl' changes.
 
+  // --- handleClick Function: What happens when a poster is clicked ---
   const handleClick = (movie) => {
+    // Takes the clicked 'movie' object as an argument.
     if (trailerUrl) {
-      setTrailerUrl("");
+      // If a trailer is already playing (trailerUrl has a value)
+      setTrailerUrl(""); // Clear trailerUrl to close the current trailer.
     } else {
-      const movieTitleQuery =
-        movie?.title ||
-        movie?.name ||
-        movie?.original_name ||
-        movie?.original_title ||
-        "";
-
-      if (!movieTitleQuery) {
-        return;
-      }
-
-      movieTrailer(movieTitleQuery, { id: true, multi: false })
-        .then((videoId) => {
-          if (videoId) {
-            setTrailerUrl(videoId);
+      // If no trailer is playing
+      // Tries to find a trailer for the movie using its title or name.
+      // 'movie?.title' uses optional chaining: if 'movie' is null/undefined, it won't error.
+      // '|| ""' provides an empty string if all title/name properties are missing.
+      movieTrailer(movie?.title || movie?.name || movie?.original_name || "")
+        .then((url) => {
+          // If 'movieTrailer' successfully finds a URL
+          if (url) {
+            // Checks if a URL was actually returned
+            console.log(url); // Logs the full YouTube URL.
+            // 'URLSearchParams' helps extract parts of a URL.
+            const urlParams = new URLSearchParams(new URL(url).search);
+            console.log(urlParams); // Logs the URL parameters object.
+            console.log(urlParams.get("v")); // Logs the value of the 'v' parameter (the video ID).
+            // Sets the 'trailerUrl' state to the extracted video ID.
+            setTrailerUrl(urlParams.get("v"));
+          } else {
+            // If 'movieTrailer' couldn't find a URL
+            console.log(`Trailer not found for ${movie?.name || movie?.title}`);
           }
         })
         .catch((error) => {
-          // console.error(`Row.js - Error finding trailer for ${movieTitleQuery}:`, error);
+          // If 'movieTrailer' itself has an error (e.g., network issue)
+          console.error("Error fetching trailer:", error);
         });
     }
   };
 
+  // --- opts Object: Configuration for the YouTube player ---
   const opts = {
-    height: "390",
-    width: "100%",
+    height: "390", // Player height in pixels.
+    width: "100%", // Player width (100% of its container).
     playerVars: {
-      autoplay: 1,
+      // Additional player parameters.
+      autoplay: 1, // '1' means autoplay the video when it loads.
     },
   };
 
+  // --- return Statement: What the component renders (JSX) ---
+  // This is the HTML-like structure that will be displayed on the screen.
   return (
     <div className="row">
-      <h2 className="title">{title}</h2>
-
+      {" "}
+      {/* Main container for the row */}
+      <h1>{title}</h1> {/* Displays the row's title (passed as a prop) */}
       <div className="row__posters">
-        {movies.map((movie) => (
+        {" "}
+        {/* Container for all the movie posters */}
+        {/*
+                  'movies?.map(...)': If 'movies' exists, loop through each 'movie' object in the array.
+                  For each movie, it creates an <img> element.
+                  'index' is the position of the movie in the array.
+                */}
+        {movies?.map((movie, index) => (
           <img
-            key={movie.id}
+            // '() => handleClick(movie)': When clicked, call 'handleClick' with this specific movie.
             onClick={() => handleClick(movie)}
-            className={`row__poster ${isLargeRow ? "row__posterLarge" : ""}`}
+            // 'key': A unique identifier for React to efficiently update list items.
+            // Prefers 'movie.id' if available, otherwise uses the array 'index'.
+            key={movie.id || index}
+            // 'src': The image source URL.
+            // It combines 'base_url' with either 'poster_path' or 'backdrop_path'.
+            // If 'isLargeRow' is true and 'movie.poster_path' exists, use 'poster_path'.
+            // Otherwise, use 'backdrop_path', or 'poster_path' as a fallback.
             src={`${base_url}${
               isLargeRow && movie.poster_path
                 ? movie.poster_path
-                : movie.backdrop_path
+                : movie.backdrop_path || movie.poster_path
             }`}
-            alt={
-              movie.name || movie.title || movie.original_name || "Movie poster"
-            }
+            // 'alt': Alternative text for the image (for accessibility and if image fails to load).
+            // Tries 'movie.name', then 'movie.title', then 'movie.original_name'.
+            alt={movie.name || movie.title || movie.original_name}
+            // 'className': CSS classes for styling.
+            // Always has 'row__poster'. If 'isLargeRow' is true, also adds 'row__posterLarge'.
+            className={`row__poster ${isLargeRow && "row__posterLarge"}`}
           />
         ))}
       </div>
-
-      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
+      {/* Container for the YouTube player, with 40px padding */}
+      <div style={{ padding: "40px" }}>
+        {/*
+                  Conditional Rendering:
+                  'trailerUrl && ...': If 'trailerUrl' has a value (is not empty),
+                  then render the '<YouTube ... />' component. Otherwise, render nothing here.
+                */}
+        {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
+      </div>
     </div>
   );
-}
+};
 
+// --- Export: Making the component available for use in other files ---
 export default Row;
-
-/*
- * == Row Component: Crucial Code Explanation ==
- *
- * This component displays a scrollable row of movie posters and can show a YouTube trailer.
- *
- * --- Imports ---
- * - `React, { useEffect, useState }`: Core React library. `useEffect` for side effects (like data fetching), `useState` for managing component state.
- * - `./row.css`: Styles specific to this row component.
- * - `axios`: A library for making HTTP requests (to get movie data).
- * - `movieTrailer`: A library to find movie trailer URLs (usually YouTube links).
- * - `YouTube`: A React component to easily embed YouTube videos.
- *
- * --- Component Definition ---
- * - `function Row({ title, fetchUrl, isLargeRow })`: Defines the `Row` component.
- *   - `title`: Prop for the row's heading (e.g., "Trending Now").
- *   - `fetchUrl`: Prop for the API endpoint to get movies for this row.
- *   - `isLargeRow`: Prop (boolean) to indicate if posters should use a larger style.
- *
- * --- State Variables ---
- * - `const [movies, setMovies] = useState([]);`:
- *   - `movies`: An array that will hold the list of movie objects. Starts empty.
- *   - `setMovies`: A function to update the `movies` array.
- * - `const [trailerUrl, setTrailerUrl] = useState("");`:
- *   - `trailerUrl`: A string that will hold the YouTube video ID for the trailer. Starts empty (no trailer).
- *   - `setTrailerUrl`: A function to update the `trailerUrl`.
- *
- * --- Constants ---
- * - `const base_url = "https://image.tmdb.org/t/p/original";`:
- *   - The base URL for fetching movie poster images from TMDb.
- *
- * --- Data Fetching (`useEffect`) ---
- * - `useEffect(() => { ... }, [fetchUrl]);`:
- *   - This block runs after the component mounts and whenever `fetchUrl` changes.
- *   - `const fetchData = async () => { ... }`: An asynchronous function to get movie data.
- *   - `const response = await axios.get(fetchUrl);`: Makes an API call using `axios` to the `fetchUrl`.
- *   - `setMovies(response.data.results);`: Updates the `movies` state with the results from the API.
- *
- * --- Poster Click Handler (`handleClick`) ---
- * - `const handleClick = (movie) => { ... };`: This function runs when a movie poster is clicked.
- *   - `if (trailerUrl)`: Checks if a trailer is already playing.
- *     - `setTrailerUrl("");`: If yes, it closes the trailer by clearing `trailerUrl`.
- *   - `else`: If no trailer is playing.
- *     - `const movieTitleQuery = ...`: Tries to get a title from the clicked `movie` object.
- *     - `movieTrailer(movieTitleQuery, { id: true, multi: false })`: Uses `movie-trailer` library to find the YouTube video ID for the movie.
- *       - `{ id: true }`: Asks the library to return just the video ID.
- *     - `.then((videoId) => { ... })`: If a video ID is found:
- *       - `setTrailerUrl(videoId);`: Sets the `trailerUrl` state, which will cause the YouTube player to render.
- *
- * --- YouTube Player Options (`opts`) ---
- * - `const opts = { ... };`: Configuration options for the `YouTube` component.
- *   - `height: "390", width: "100%"`: Sets the dimensions of the player.
- *   - `playerVars: { autoplay: 1 }`: Tells the player to start playing automatically when it loads.
- *
- * --- JSX (Component Rendering) ---
- * - `<div className="row">`: The main container for the entire row.
- * - `<h2 className="title">{title}</h2>`: Displays the row's title.
- * - `<div className="row__posters">`: The horizontally scrollable container for the movie posters.
- *   - `{movies.map((movie) => ( ... ))}`: Loops through the `movies` array and renders an `<img>` for each.
- *     - `<img ... />`: Represents a single movie poster.
- *       - `key={movie.id}`: A unique key for React to efficiently update the list.
- *       - `onClick={() => handleClick(movie)}`: Calls `handleClick` when the poster is clicked.
- *       - `className={...isLargeRow ? "row__posterLarge" : ""}`: Applies a special class for larger posters if `isLargeRow` is true.
- *       - `src={...}`: Constructs the image URL using `base_url` and either `poster_path` or `backdrop_path` from the movie data.
- *       - `alt={...}`: Provides alternative text for the image.
- * - `{trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}`:
- *   - This is conditional rendering. The `<YouTube ... />` component is only rendered if `trailerUrl` has a value (i.e., a trailer ID is set).
- *   - `videoId={trailerUrl}`: Passes the trailer ID to the YouTube player.
- *
- * --- Export ---
- * - `export default Row;`: Makes the `Row` component available for use in other parts of the application.
- */
